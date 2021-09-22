@@ -69,8 +69,7 @@ graphical interface to allow the user to visually choose which screen to record 
 
 ### 3. Start recording
 
-    sr.startRecording(
-                filePath);
+    sr.startRecording(filePath);
 
 This will immediatelly start recording the main screen, using the maximum FPS.
 
@@ -94,5 +93,5 @@ This option allows more control on the recording method.
 There is a running example in the class: EntryPoint.java
 
 NOTE:
-This software is not intended yet to be used in production systems nor high availability environments.
+This software is not intended yet to be used in production systems nor in high availability environments.
 
