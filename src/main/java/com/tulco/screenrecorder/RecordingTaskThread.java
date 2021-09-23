@@ -1,4 +1,4 @@
-package com.tulco.desktopscreenrecorder;
+package com.tulco.screenrecorder;
 
 /**
  * This is the thread that starts recording
@@ -7,7 +7,7 @@ public class RecordingTaskThread extends Thread {
     ScreenRecorder dsr = null;
     String filePath;
     int fps;
-    ScreenReference desktop;
+    ScreenReference screenReference;
     boolean timeStamp;
     int numImages;
     int maximumRecordingSeconds = 0;
@@ -27,7 +27,7 @@ public class RecordingTaskThread extends Thread {
      * @param dsr
      * @param filePath
      * @param fps
-     * @param desktop
+     * @param screenReference
      * @param timeStamp
      * @param numImages
      * @param maximumRecordingSeconds
@@ -36,14 +36,14 @@ public class RecordingTaskThread extends Thread {
     public RecordingTaskThread(
             ScreenRecorder dsr,
             String filePath, int fps,
-            ScreenReference desktop,
+            ScreenReference screenReference,
             boolean timeStamp,
             int numImages, int maximumRecordingSeconds,
             int splitVideoInMinutes) {
         this.dsr = dsr;
         this.filePath = filePath;
         this.fps = fps;
-        this.desktop = desktop;
+        this.screenReference = screenReference;
         this.timeStamp = timeStamp;
         this.numImages = numImages;
         this.maximumRecordingSeconds = maximumRecordingSeconds;
@@ -56,8 +56,8 @@ public class RecordingTaskThread extends Thread {
     public void run() {
         try {
             isRunning = true;
-            dsr.recordDesktop(
-                    filePath, fps, desktop, timeStamp,
+            dsr.recordScreen(
+                    filePath, fps, screenReference, timeStamp,
                     numImages, maximumRecordingSeconds,
                     splitVideoInMinutes);
         } catch (Exception e) {

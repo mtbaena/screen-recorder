@@ -1,4 +1,4 @@
-package com.tulco.desktopscreenrecorder;
+package com.tulco.screenrecorder;
 
 
 import org.junit.jupiter.api.Test;

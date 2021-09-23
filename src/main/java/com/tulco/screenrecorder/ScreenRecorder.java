@@ -1,4 +1,4 @@
-package com.tulco.desktopscreenrecorder;
+package com.tulco.screenrecorder;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -47,6 +47,7 @@ public class ScreenRecorder {
     public ScreenRecorder(int width, int height, int fps) throws AWTException, IOException {
         this.width = width;
         this.height = height;
+        this.maxFPS = fps;
         robot = new Robot();
         lastTimeRobotWasReset = System.currentTimeMillis();
         if (fps<1) {
@@ -71,7 +72,7 @@ public class ScreenRecorder {
     }
 
     /**
-     * Grab an image from main desktop
+     * Grab an image from main screen
      * @return
      */
     public BufferedImage createScreenCapture() {
@@ -79,7 +80,7 @@ public class ScreenRecorder {
     }
 
     /**
-     * Grabs an image from the provided desktop/screen
+     * Grabs an image from the provided screen
      * @param dr
      * @return
      */
@@ -109,19 +110,20 @@ public class ScreenRecorder {
         final int NUM_FRAMES = 40;
         final String TEST_FILENAME = "DELME_test.mp4";
 
+        System.out.println("##########################################################################################");
         System.out.println("## Performing recording test. This will take few seconds...");
-        // Get the biggest desktop
-        ScreenReference biggestDesktop = biggestDesktop();
+        // Get the biggest screen
+        ScreenReference biggestScreen = biggestScreen();
 
         // warming up.
-        recordDesktop(
+        recordScreen(
                 TEST_FILENAME,
-                10, biggestDesktop, true, 10);
+                10, biggestScreen, true, 10);
         // time a recording.
         long start = System.currentTimeMillis();
-        recordDesktop(
+        recordScreen(
                 TEST_FILENAME,
-                10, biggestDesktop, true, NUM_FRAMES);
+                10, biggestScreen, true, NUM_FRAMES);
         long stop = System.currentTimeMillis();
         // compute FPS.
         double computedFPS =
@@ -129,6 +131,7 @@ public class ScreenRecorder {
                 -1; // reducing by one to be more conservative
 
         System.out.println("### Max FPS: "+computedFPS);
+        System.out.println("##########################################################################################");
 
         try {
             File delFile = new File(TEST_FILENAME);
@@ -142,22 +145,22 @@ public class ScreenRecorder {
     }
 
     /**
-     * Returns the desktop that has the biggest area, out of
+     * Returns the screen that has the biggest area, out of
      * the available screens on this computer. It is used as a
-     * pesimistic approach for computing the FPS.
+     * pessimistic approach for computing the FPS.
      *
      * @return The reference to the biggest screen.
      * @throws AWTException
      */
-    private ScreenReference biggestDesktop() throws AWTException {
-        List<ScreenReference> lstDt = listScreens();
+    private ScreenReference biggestScreen() throws AWTException {
+        List<ScreenReference> lstScreens = listScreens();
         long biggestArea = -1;
-        ScreenReference biggestDesktop = null;
-        for (ScreenReference dr : lstDt) {
+        ScreenReference biggestScreen = null;
+        for (ScreenReference dr : lstScreens) {
             if (dr.computeArea()>biggestArea) biggestArea = dr.computeArea();
-            biggestDesktop = dr;
+            biggestScreen = dr;
         }
-        return biggestDesktop;
+        return biggestScreen;
     }
 
     /**
@@ -165,17 +168,17 @@ public class ScreenRecorder {
      *
      * @param filePath
      * @param fps
-     * @param desktop
+     * @param screen
      * @param timeStamp
      * @param numImages
      * @throws IOException
      */
-    public void recordDesktop(
+    public void recordScreen(
             String filePath, int fps,
-            ScreenReference desktop,
+            ScreenReference screen,
             boolean timeStamp,
             int numImages) throws IOException, AWTException {
-        recordDesktop(filePath, fps, desktop, timeStamp, numImages, -1);
+        recordScreen(filePath, fps, screen, timeStamp, numImages, -1);
     }
 
     /**
@@ -183,20 +186,20 @@ public class ScreenRecorder {
      *
      * @param filePath
      * @param fps
-     * @param desktop
+     * @param screen
      * @param timeStamp
      * @param maximumNumberOfImagesToRecord
      * @param maximumRecordingSeconds
      * @throws IOException
      * @throws AWTException
      */
-    public void recordDesktop(
+    public void recordScreen(
             String filePath, int fps,
-            ScreenReference desktop,
+            ScreenReference screen,
             boolean timeStamp,
             int maximumNumberOfImagesToRecord,
             int maximumRecordingSeconds) throws IOException, AWTException {
-        recordDesktop(filePath, fps, desktop, timeStamp,
+        recordScreen(filePath, fps, screen, timeStamp,
                 maximumNumberOfImagesToRecord, maximumRecordingSeconds,
                 0);
     }
@@ -206,7 +209,7 @@ public class ScreenRecorder {
      *
      * @param givenFilePath
      * @param fps
-     * @param desktop
+     * @param screen
      * @param timeStamp
      * @param maximumNumberOfImagesToRecord
      * @param maximumRecordingSeconds
@@ -214,10 +217,10 @@ public class ScreenRecorder {
      * @throws IOException
      * @throws AWTException
      */
-    public void recordDesktop(
+    public void recordScreen(
             String givenFilePath,
             int fps,
-            ScreenReference desktop,
+            ScreenReference screen,
             boolean timeStamp,
             int maximumNumberOfImagesToRecord,
             int maximumRecordingSeconds,
@@ -282,7 +285,7 @@ public class ScreenRecorder {
             }
             lastFrameTime = now; // Setting time ahead of grabbing to compensate actual recording time.
             // Grab image
-            BufferedImage image = createScreenCapture(desktop);
+            BufferedImage image = createScreenCapture(screen);
             // Resize image
             image = GeneralUtils.resize2(image, width, height);
             if (null==lastImage || imageCount%fps==1) {
@@ -327,7 +330,7 @@ public class ScreenRecorder {
 
     /**
      * It checks the available screens and reports them back.
-     * @return The list of desktop references.
+     * @return The list of screen references.
      * @throws AWTException
      */
     public List<ScreenReference> listScreens() throws AWTException {
@@ -377,6 +380,18 @@ public class ScreenRecorder {
             String filename)
     {
         startRecording(filename, 0, null, -1, false, 0);
+    }
+
+    /**
+     * Records in a different thread for N seconds.
+     *
+     * @param filename
+     */
+    public void startRecording(
+            String filename,
+            int numberOfSeconds)
+    {
+        startRecording(filename, numberOfSeconds, null, -1, false, 0);
     }
 
     /**

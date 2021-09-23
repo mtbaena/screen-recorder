@@ -1,11 +1,10 @@
-package com.tulco.desktopscreenrecorder;
+package com.tulco.screenrecorder;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * This holds a reference to a desktop.
- * A desktop is functionally a screen connected to the computer.
+ * This holds a reference to a screen.
  */
 public class ScreenReference {
     /**
