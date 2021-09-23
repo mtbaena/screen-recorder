@@ -1,7 +1,5 @@
 # screen-recorder
 
----
-
 Java component for screen-recording videos.
 
 This component allows java systems to record from the screen. It creates an mp4 file with the created video. The video is not playable until you stop recording.
@@ -22,8 +20,6 @@ It uses:
 
 ## Functional Overview:
 
----
-
 **Create the component** that will automatically perform a test of the running computer to measure its recording capabilities.
 
 **Choose which screen** you will record from. It will record the main one if you do not specify it.
@@ -41,8 +37,6 @@ Note that black images will be created if, for example, a second screen gets sud
 **Stop recording**. The video will be available as an MP4 file.
 
 ## Usage:
-
----
 
 In order to record, one should:
 
@@ -122,8 +116,6 @@ Once the recorder stops, the created video is ready to be used (played, moved, .
 
 ## Examples
 
----
-
 Examples can be found in the package: **com.tulco.examples**.
 
 The simplest example to record 5 seconds:
@@ -157,8 +149,6 @@ This example shows full control of the execution and mimics parallel processing.
 
 ## Limitations and Pending Features
 
----
-
 * It does not allow configuration for the label with the timestamp.
 * The frames per second achieved are low since it does not use hardware acceleration nor advanced libraries.
 * When splitting video files, you could lose a small fraction of a second in between videos.
@@ -168,8 +158,6 @@ This example shows full control of the execution and mimics parallel processing.
 * The logs are very basic. Also, they use System.out
 
 ## Disclaimer:
-
----
 
 This software is not intended yet to be used in production systems nor in high availability environments.
 
